@@ -185,7 +185,7 @@ export default function Home() {
           ) : brandName ? (
             brandName + " NFTs are coming.."
           ) : (
-            "Tron Whitelister is not rented for any wshitelisting yet"
+            "Tron Whitelister is not rented by anyone yet"
           )}
         </div>
       ) : (
