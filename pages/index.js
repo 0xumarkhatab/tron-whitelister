@@ -12,11 +12,12 @@ import {
 } from "../SmartContractsStuff/contractInteraction";
 import { getTokensMetaData } from "../SmartContractsStuff/IpfsInteraction";
 import ShowNFTs from "./ShowNFTs";
-import { SiApostrophe } from "react-icons/si";
 
 let myUrlAddress = "https://theWhitelister.vercel.app";
 //
 let websiteType = "whitelist";
+// let Blockchain = "ethereum";
+// let NetworkChain = "goerli";
 let Blockchain = "ethereum";
 let NetworkChain = "goerli";
 
