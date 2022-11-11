@@ -15,7 +15,7 @@ import ShowNFTs from "./ShowNFTs";
 import { getCurrentConnectedOwner } from "../SmartContractsStuff/accountsConnect";
 import { getBlockchainSpecificWhitelistContract } from "../SmartContractsStuff/contractMetdadata";
 
-let myUrlAddress = "https://thewhitelister.vercel.app";
+let myUrlAddress = "https://tron-whitelister.vercel.app";
 //
 let websiteType = "whitelist";
 // let Blockchain = "ethereum";
