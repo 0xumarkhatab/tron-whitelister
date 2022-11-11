@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  getWhitelistContract,
+  getEthWhitelistContract,
   getTokenOwner,
   mint,
 } from "../SmartContractsStuff/contractInteraction";
 import styles from "../styles/NFTInformation.module.css";
 import Web3Modal from "web3modal";
 import { useAccount } from "wagmi";
+import { getBlockchainSpecificWhitelistContract } from "../SmartContractsStuff/contractMetdadata";
 
-let Blockchain = "ethereum";
-let NetworkChain = "goerli";
+// let Blockchain = "ethereum";
+// let NetworkChain = "goerli";
+let Blockchain = "tron";
+let NetworkChain = "nile";
 
 function NFTInformation(props) {
   const { isConnected, isDisconnected, address } = useAccount();
@@ -20,7 +23,7 @@ function NFTInformation(props) {
   let toggler = props.toggler;
   let contractAddress = props.contractAddress;
   let whitelistStatus = props.whitelistStatus;
-  let isWhitelisted=props.isWhitelisted;
+  let isWhitelisted = props.isWhitelisted;
   let nftPrice = parseInt(nft?.price);
   let nftOwner = nft.owner;
   if (Blockchain == "ethereum") {
@@ -36,15 +39,13 @@ function NFTInformation(props) {
     if (userIsWhitelisted) {
       alert("You already Whitelisted ..");
       return null;
-
     }
 
-    if(!whitelistStatus){
+    if (!whitelistStatus) {
       alert("Whitelist has ended already  ..");
       return null;
-      
     }
-    
+
     alert("Stated whitelisting ...");
     if (web3ModalRef.current === undefined) {
       web3ModalRef.current = new Web3Modal({
@@ -57,21 +58,38 @@ function NFTInformation(props) {
     setTimeout(() => {
       setwhitelistingStatus("Please Wait..");
     }, 4000);
-    let whitelistContract = await getWhitelistContract(
+    let whitelistContract = await getBlockchainSpecificWhitelistContract(
       Blockchain,
       NetworkChain,
       web3ModalRef,
       contractAddress
     );
-    // console.log("sale contract is ", whitelistContract);
+    console.log("whitelist contract is ", whitelistContract);
     try {
-      let tx = await whitelistContract.addAddressToWhitelist({
-        value: 0,
-      });
+      if (Blockchain == "tron") {
+        try {
+          console.log("calling tron whitelist me");
+          let tx = await whitelistContract.addAddressToWhitelist().send({
+            feeLimit: 100000000,
+            callValue: 0,
+            tokenId: "",
+            tokenValue: "",
+            shouldPollResponse: true,
+          });
+          successCallback();
+        } catch (e) {
+          alert("Whitelisting failed");
+          console.log(e);
+        }
+      } else if (Blockchain == "ethereum") {
+        let tx = await whitelistContract.addAddressToWhitelist({
+          value: 0,
+        });
 
-      setwhitelistingStatus("Wait for confirmation..");
-      await tx.wait();
-      successCallback();
+        setwhitelistingStatus("Wait for confirmation..");
+        await tx.wait();
+        successCallback();
+      }
     } catch (e) {
       if (e.toString().includes("has ended"))
         setwhitelistingStatus("Whitelisting ended!");

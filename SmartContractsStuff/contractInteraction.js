@@ -4,6 +4,7 @@ import {
   whitelistContractABI,
   WebsiteRentABI,
   WebsiteRentAddress,
+  getBlockchainSpecificWebsiteRentContract,
 } from "./contractMetdadata";
 import { getTokensMetaData } from "./IpfsInteraction";
 
@@ -25,22 +26,20 @@ export const getWebsiteRentContract = async (
     //
   }
 };
-export const getWhitelistContract = async (
+export const getEthWhitelistContract = async (
   Blockchain,
   NetworkChain,
   web3ModalRef,
   contractAddress
 ) => {
-  if (Blockchain == "ethereum") {
-    let signer = await getProviderOrSigner(web3ModalRef, true);
-    const whitelistContract = new Contract(contractAddress, whitelistContractABI, signer);
-    return whitelistContract;
-  } else if (Blockchain == "tron") {
-  } else {
-    //
-  }
+  let signer = await getProviderOrSigner(web3ModalRef, true);
+  const whitelistContract = new Contract(
+    contractAddress,
+    whitelistContractABI,
+    signer
+  );
+  return whitelistContract;
 };
-
 
 export async function getCollectionURIs(
   Blockchain,
@@ -48,35 +47,34 @@ export async function getCollectionURIs(
   web3ModalRef,
   contract
 ) {
-  let _totalSupply = await contract.totalSupply();
+  let _totalSupply =
+    Blockchain == "tron"
+      ? await contract.totalSupply().call()
+      : await contract.totalSupply();
   let numNFTsToFetch = 0;
   numNFTsToFetch = parseInt(_totalSupply);
   let baseURIs = [];
 
   console.log("Obtaining ", numNFTsToFetch, " NFTs");
-  let baseUri=await contract.baseURI();
-  if(baseUri.toString().endsWith("/")){
-    baseUri=baseUri.slice(0,-1);
+  let baseUri =
+    Blockchain == "tron"
+      ? await contract.baseURI().call()
+      : await contract.baseURI();
+  if (baseUri.toString().endsWith("/")) {
+    baseUri = baseUri.slice(0, -1);
   }
   for (let index = 0; index < numNFTsToFetch; index++) {
-      let tokenuri=baseUri+`/${index+1}.json`;    
-      baseURIs.push(tokenuri);
+    let tokenuri = baseUri + `/${index + 1}.json`;
+    baseURIs.push(tokenuri);
   }
-    // console.log("base uris are ", baseURIs);
+  // console.log("base uris are ", baseURIs);
   return baseURIs;
 }
 function noDeployment(adr) {
-  if (
-    !adr ||
-    adr?.toString().includes("0x0000") ||
-    adr?.toString().includes("0X0000")
-  )
-    return true;
+  if (!adr || adr?.toString().endsWith("00000000000")) return true;
 
   return false;
 }
-
-
 
 export async function getCurrentDeployment(
   Blockchain,
@@ -84,24 +82,34 @@ export async function getCurrentDeployment(
   web3ModalRef,
   websiteURL
 ) {
-  //   console.log("inside getting current deployment");
-  let contract = await getWebsiteRentContract(
+  console.log("inside getting current deployment");
+  console.log({ Blockchain, NetworkChain, web3ModalRef });
+  let contract = await getBlockchainSpecificWebsiteRentContract(
     Blockchain,
     NetworkChain,
     web3ModalRef
   );
-  //   console.log("contract is ", contract);
+  console.log("contract is ", contract);
+  let _currentDeployment = null;
   console.log("checking Deployment of _" + websiteURL + "_");
-  let _currentDeployment = await contract.websiteToDeployment(websiteURL);
+  if (Blockchain == "tron") {
+    _currentDeployment = await contract.websiteToDeployment(websiteURL).call();
+  } else if (Blockchain == "ethereum") {
+    _currentDeployment = await contract.websiteToDeployment(websiteURL);
+  }
   //   console.log("curremt deployment", _currentDeployment);
   if (noDeployment(_currentDeployment)) {
     console.log("No deployment");
     return null;
   }
 
-  let rentTime = await contract.rentTime(websiteURL);
+  let rentTime =
+    Blockchain == "tron"
+      ? await contract.rentTime(websiteURL).call()
+      : await contract.rentTime(websiteURL);
 
   let jsEpochRentTime = parseInt(rentTime * 1000);
+
   let currentTime = new Date().getTime();
   if (jsEpochRentTime <= currentTime) {
     _currentDeployment = null;

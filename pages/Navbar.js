@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import navstyle from "../styles/Navbar.module.css";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { getMinimalAddress } from "../Utilities";
+import { getCurrentConnectedOwner } from "../SmartContractsStuff/accountsConnect";
+// let Blockchain="ethereum";
+// let NetworkChain="goerli";
+let Blockchain = "tron";
+let NetworkChain = "nile";
 
 export default function Navbar(props) {
-  let brandName=props.brandName;
+  let connectWallet=props.connectWallet;
+  let connectedAddress=props.connectedAddress;
+
+  const [connectedWallet, setConnectedWallet] = useState(connectedAddress);
+  let brandName = props.brandName;
+  let web3ModalRef = useRef();
   const homepage = () => {
     console.log("call home page");
     props.func("home");
@@ -16,9 +26,21 @@ export default function Navbar(props) {
     console.log("call about page");
     props.func("about");
   };
+
+  
+  useEffect(()=>{
+   getCurrentConnectedOwner(
+      Blockchain,
+      NetworkChain,
+      web3ModalRef,
+      setConnectedWallet
+    );
+    
+  },[])
+
   return (
     <>
-      <div  className={navstyle.maincontainer}>
+      <div className={navstyle.maincontainer}>
         <div className={navstyle.container1}>
           <img src={props.image} alt="icon" className={navstyle.image} />
           <p>{brandName}</p>
@@ -35,7 +57,20 @@ export default function Navbar(props) {
           </button>
         </div>
         <div className={navstyle.container3}>
-          <ConnectButton chainStatus={false} label={"Connect"}   showBalance={false}/>
+          <button
+            style={{
+              padding: "10px",
+              fontSize: "18px",
+              background: connectedWallet?"	#00ffbf": "white",
+
+              borderRadius: "20px",
+              color: "black",
+              cursor:"pointer"
+            }}
+            onClick={connectWallet}
+          >
+            {connectedWallet ? getMinimalAddress(connectedWallet) : <p>Connect</p>}
+          </button>
         </div>
       </div>
     </>

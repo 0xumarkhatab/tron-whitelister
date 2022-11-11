@@ -8,22 +8,23 @@ import Web3Modal from "web3modal";
 import {
   getCollectionURIs,
   getCurrentDeployment,
-  getWhitelistContract,
+  getEthWhitelistContract,
 } from "../SmartContractsStuff/contractInteraction";
 import { getTokensMetaData } from "../SmartContractsStuff/IpfsInteraction";
 import ShowNFTs from "./ShowNFTs";
+import { getCurrentConnectedOwner } from "../SmartContractsStuff/accountsConnect";
+import { getBlockchainSpecificWhitelistContract } from "../SmartContractsStuff/contractMetdadata";
 
-let myUrlAddress = "https://theWhitelister.vercel.app";
+let myUrlAddress = "https://thewhitelister.vercel.app";
 //
 let websiteType = "whitelist";
 // let Blockchain = "ethereum";
 // let NetworkChain = "goerli";
-let Blockchain = "ethereum";
-let NetworkChain = "goerli";
+let Blockchain = "tron";
+let NetworkChain = "nile";
 
 export default function Home() {
   const [currentpage, setCurrentPage] = useState("home");
-  const { isConnected, isDisconnected, address } = useAccount();
   const [currentDeployment, setCurrentDeployment] = useState(null);
   const [loading, setLoading] = useState(true);
   const [brandName, setBrandName] = useState(null);
@@ -31,28 +32,42 @@ export default function Home() {
   const [whitelistEndTime, setWhitelistEndTime] = useState(0);
   const [isCurrentUserWhitelisted, setIsCurrentUserWhitelisted] =
     useState(false);
+  const [connectedWallet, setConnectedWallet] = useState(null);
   const [NFTs, setNFTs] = useState([]);
 
   const web3ModalRef = useRef();
 
   async function fetchCollection(deploymentAddress) {
-    if (!isConnected) return null;
-    // console.log("making a sale contract ");
-    let whitelistContract = await getWhitelistContract(
+    console.log("fetching collection for ",deploymentAddress)
+    let whitelistContract = await getBlockchainSpecificWhitelistContract(
       Blockchain,
       NetworkChain,
       web3ModalRef,
       deploymentAddress
     );
-    // console.log("sale contract is ", whitelistContract);
-    let _name = await whitelistContract.name();
+    console.log("whitelist contract is ", whitelistContract);
+    let _name =
+      Blockchain == "tron"
+        ? await whitelistContract.name().call()
+        : await whitelistContract.name();
 
-    let isWhitelisted = await whitelistContract.isWhitelisted(address);
+    let isWhitelisted =
+      Blockchain == "tron"
+        ? await whitelistContract.isWhitelisted(connectedWallet).call()
+        : await whitelistContract.isWhitelisted(connectedWallet);
+
     if (isWhitelisted) setIsCurrentUserWhitelisted(true);
-    let _whitelistingEndTime = await whitelistContract.endTime();
+    let _whitelistingEndTime =
+      Blockchain == "tron"
+        ? await whitelistContract.endTime().call()
+        : await whitelistContract.endTime();
+
     _whitelistingEndTime = parseInt(_whitelistingEndTime) * 1000;
     setWhitelistEndTime(_whitelistingEndTime);
-    let _whitelistingStartTime = await whitelistContract.startTime();
+    let _whitelistingStartTime =
+      Blockchain == "tron"
+        ? await whitelistContract.startTime().call()
+        : await whitelistContract.startTime();
     _whitelistingStartTime = parseInt(_whitelistingStartTime) * 1000;
     setWhitelistStartTime(_whitelistingStartTime);
 
@@ -68,6 +83,14 @@ export default function Home() {
     setLoading(false);
   }
   async function fetchDeployment() {
+    if (web3ModalRef.current === undefined) {
+      web3ModalRef.current = new Web3Modal({
+        network: NetworkChain,
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+    }
+
     let _currentDeployment = await getCurrentDeployment(
       Blockchain,
       NetworkChain,
@@ -79,11 +102,13 @@ export default function Home() {
   }
 
   async function init() {
-    if (!address) {
+    if (!connectedWallet) {
+      connect();
       return null;
     }
+
     let deploymentAddress = await fetchDeployment();
-    // console.log("inside index", deploymentAddress);
+    console.log("inside index", deploymentAddress);
     console.log("deployment", deploymentAddress);
     if (deploymentAddress != null) {
       await fetchCollection(deploymentAddress);
@@ -96,17 +121,17 @@ export default function Home() {
     // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
     // Assign the Web3Modal class to the reference object by setting it's `current` value
     // The `current` value is persisted throughout as long as this page is open
-    if (web3ModalRef.current === undefined) {
-      web3ModalRef.current = new Web3Modal({
-        network: NetworkChain,
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
-
     init();
-  }, [isConnected]);
+  }, [connectedWallet]);
   // console.log("NFTs are ", NFTs);
+  async function connect() {
+    let user = await getCurrentConnectedOwner(
+      Blockchain,
+      NetworkChain,
+      web3ModalRef
+    );
+    setConnectedWallet(user);
+  }
 
   return (
     <div
@@ -119,6 +144,8 @@ export default function Home() {
         image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr7ZZQwTn5ClB5v8hOJTehixgGs5csluH-8WIUQEB2rdEaFFzXWOoXY4oOGK09US2CAdY&usqp=CAU"
         brandName={brandName ? brandName : "whitelister"}
         func={setCurrentPage}
+        connectWallet={connect}
+        connectedAddress={connectedWallet}
       />
       {currentDeployment == null ? (
         <div
@@ -134,13 +161,32 @@ export default function Home() {
             fontWeight: "700",
           }}
         >
-          {!isConnected
-            ? "Connect Wallet First"
-            : loading && !brandName
-            ? "Loading Hosted Collection's details"
-            : brandName
-            ? brandName + " NFTs are coming.."
-            : "Whitelister is not rented for any wshitelisting yet"}
+          {!connectedWallet ? (
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              {" "}
+              <p
+                onClick={connect}
+                style={{
+                  textDecoration: "underline",
+                  marginRight: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Connect Wallet
+              </p>
+              First
+            </div>
+          ) : loading && !brandName ? (
+            "Loading Hosted Collection's details"
+          ) : brandName ? (
+            brandName + " NFTs are coming.."
+          ) : (
+            "Whitelister is not rented for any wshitelisting yet"
+          )}
         </div>
       ) : (
         <>

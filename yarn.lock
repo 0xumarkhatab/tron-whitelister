@@ -2526,6 +2526,13 @@
   dependencies:
     "follow-redirects" "^1.14.0"
 
+"axios@^0.26.1":
+  "integrity" "sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA=="
+  "resolved" "https://registry.npmjs.org/axios/-/axios-0.26.1.tgz"
+  "version" "0.26.1"
+  dependencies:
+    "follow-redirects" "^1.14.8"
+
 "axios@^1.1.3":
   "integrity" "sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-1.1.3.tgz"
@@ -2671,6 +2678,11 @@
   "version" "1.1.5"
   dependencies:
     "bindings" "^1.3.0"
+
+"bignumber.js@^9.0.1":
+  "integrity" "sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A=="
+  "resolved" "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.0.tgz"
+  "version" "9.1.0"
 
 "bind-decorator@^1.0.11":
   "integrity" "sha512-yzkH0uog6Vv/vQ9+rhSKxecnqGUZHYncg7qS7voz3Q76+TAi1SGiOKk2mlOvusQnFz9Dc4BC/NMkeXu11YgjJg=="
@@ -3975,7 +3987,7 @@
     "ethjs-util" "0.1.6"
     "rlp" "^2.2.3"
 
-"ethers@^5.7.1", "ethers@>=5.5.1":
+"ethers@^5.4.4", "ethers@^5.7.1", "ethers@>=5.5.1":
   "integrity" "sha512-5krze4dRLITX7FpU8J4WscXqADiKmyeNlylmmDLbS95DaZpBhDe2YSwRQwKXWNyXcox7a3gBgm/MkGXV1O1S/Q=="
   "resolved" "https://registry.npmjs.org/ethers/-/ethers-5.7.1.tgz"
   "version" "5.7.1"
@@ -4023,6 +4035,11 @@
   "integrity" "sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ=="
   "resolved" "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   "version" "5.0.1"
+
+"eventemitter3@^3.1.0":
+  "integrity" "sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q=="
+  "resolved" "https://registry.npmjs.org/eventemitter3/-/eventemitter3-3.1.2.tgz"
+  "version" "3.1.2"
 
 "eventemitter3@^4.0.7", "eventemitter3@4.0.7":
   "integrity" "sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw=="
@@ -4244,7 +4261,7 @@
   "resolved" "https://registry.npmjs.org/flow-parser/-/flow-parser-0.121.0.tgz"
   "version" "0.121.0"
 
-"follow-redirects@^1.14.0", "follow-redirects@^1.15.0":
+"follow-redirects@^1.14.0", "follow-redirects@^1.14.8", "follow-redirects@^1.15.0":
   "integrity" "sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   "version" "1.15.2"
@@ -4624,6 +4641,11 @@
   "integrity" "sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ=="
   "resolved" "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
   "version" "2.0.4"
+
+"injectpromise@^1.0.0":
+  "integrity" "sha512-qNq5wy4qX4uWHcVFOEU+RqZkoVG65FhvGkyDWbuBxILMjK6A1LFf5A1mgXZkD4nRx5FCorD81X/XvPKp/zVfPA=="
+  "resolved" "https://registry.npmjs.org/injectpromise/-/injectpromise-1.0.0.tgz"
+  "version" "1.0.0"
 
 "internal-slot@^1.0.3":
   "integrity" "sha512-O0DB1JC/sPyZl7cIo78n5dR7eUSwwpYPiXRhTzNxZVAMUuB8vlnRFyLxdrVToks6XPLVnFfbzaVd5WLjhgg+vA=="
@@ -5315,7 +5337,7 @@
   "resolved" "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   "version" "4.1.1"
 
-"lodash@^4.17.11", "lodash@^4.17.20":
+"lodash@^4.17.11", "lodash@^4.17.20", "lodash@^4.17.21":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   "version" "4.17.21"
@@ -7467,6 +7489,22 @@
   "resolved" "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   "version" "0.0.3"
 
+"tronweb@^4.4.0":
+  "integrity" "sha512-0yPmjQE1drPcDtW4YCXFjtvDQmKc/utjKB2J6U5GDcWWhsGqE8yFjdIMJRa1yj1a/oFQNlthKMzw4Jd7lkWbYA=="
+  "resolved" "https://registry.npmjs.org/tronweb/-/tronweb-4.4.0.tgz"
+  "version" "4.4.0"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "axios" "^0.26.1"
+    "bignumber.js" "^9.0.1"
+    "elliptic" "^6.5.4"
+    "ethers" "^5.4.4"
+    "eventemitter3" "^3.1.0"
+    "injectpromise" "^1.0.0"
+    "lodash" "^4.17.21"
+    "semver" "^5.6.0"
+    "validator" "^13.7.0"
+
 "tsconfig-paths@^3.14.1":
   "integrity" "sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ=="
   "resolved" "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz"
@@ -7685,6 +7723,11 @@
   "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"
+
+"validator@^13.7.0":
+  "integrity" "sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw=="
+  "resolved" "https://registry.npmjs.org/validator/-/validator-13.7.0.tgz"
+  "version" "13.7.0"
 
 "vary@~1.1.2":
   "integrity" "sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg=="
