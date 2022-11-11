@@ -142,7 +142,7 @@ export default function Home() {
     >
       <Navbar
         image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr7ZZQwTn5ClB5v8hOJTehixgGs5csluH-8WIUQEB2rdEaFFzXWOoXY4oOGK09US2CAdY&usqp=CAU"
-        brandName={brandName ? brandName : "whitelister"}
+        brandName={brandName ? brandName : "tron whitelister"}
         func={setCurrentPage}
         connectWallet={connect}
         connectedAddress={connectedWallet}
@@ -185,7 +185,7 @@ export default function Home() {
           ) : brandName ? (
             brandName + " NFTs are coming.."
           ) : (
-            "Whitelister is not rented for any wshitelisting yet"
+            "Tron Whitelister is not rented for any wshitelisting yet"
           )}
         </div>
       ) : (
