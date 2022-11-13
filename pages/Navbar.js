@@ -8,9 +8,9 @@ let Blockchain = "tron";
 let NetworkChain = "nile";
 
 export default function Navbar(props) {
-  let connectWallet=props.connectWallet;
-  let connectedAddress=props.connectedAddress;
-
+  let connectWallet = props.connectWallet;
+  let connectedAddress = props.connectedAddress;
+console.log("connected address is ",connectedAddress)
   const [connectedWallet, setConnectedWallet] = useState(connectedAddress);
   let brandName = props.brandName;
   let web3ModalRef = useRef();
@@ -27,16 +27,14 @@ export default function Navbar(props) {
     props.func("about");
   };
 
-  
-  useEffect(()=>{
-   getCurrentConnectedOwner(
+  useEffect(() => {
+    getCurrentConnectedOwner(
       Blockchain,
       NetworkChain,
       web3ModalRef,
       setConnectedWallet
     );
-    
-  },[])
+  }, []);
 
   return (
     <>
@@ -61,15 +59,19 @@ export default function Navbar(props) {
             style={{
               padding: "10px",
               fontSize: "18px",
-              background: connectedWallet?"	#00ffbf": "white",
+              background: connectedWallet ? "	#00ffbf" : "white",
 
               borderRadius: "20px",
               color: "black",
-              cursor:"pointer"
+              cursor: "pointer",
             }}
             onClick={connectWallet}
           >
-            {connectedWallet ? getMinimalAddress(connectedWallet) : <p>Connect</p>}
+            {connectedWallet ? (
+              getMinimalAddress(connectedAddress)
+            ) : (
+              <p>Connect</p>
+            )}
           </button>
         </div>
       </div>
