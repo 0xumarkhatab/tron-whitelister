@@ -68,7 +68,7 @@ console.log("connected address is ",connectedAddress)
             onClick={connectWallet}
           >
             {connectedWallet ? (
-              getMinimalAddress(connectedAddress)
+              getMinimalAddress(connectedAddress,true)
             ) : (
               <p>Connect</p>
             )}
