@@ -5,7 +5,7 @@ import { getCurrentConnectedOwner } from "../SmartContractsStuff/accountsConnect
 // let Blockchain="ethereum";
 // let NetworkChain="goerli";
 let Blockchain = "tron";
-let NetworkChain = "nile";
+let NetworkChain = "shasta";
 
 export default function Navbar(props) {
   let connectWallet = props.connectWallet;

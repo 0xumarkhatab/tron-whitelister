@@ -5,8 +5,8 @@ import {
   WebsiteRentABI,
   WebsiteRentAddress,
   getBlockchainSpecificWebsiteRentContract,
+  getTronWebsiteRentContract,
 } from "./contractMetdadata";
-import { getTokensMetaData } from "./IpfsInteraction";
 
 export const getWebsiteRentContract = async (
   Blockchain,
@@ -83,30 +83,21 @@ export async function getCurrentDeployment(
   websiteURL
 ) {
   console.log("inside getting current deployment");
-  console.log({ Blockchain, NetworkChain, web3ModalRef });
-  let contract = await getBlockchainSpecificWebsiteRentContract(
-    Blockchain,
-    NetworkChain,
-    web3ModalRef
-  );
+  
+  let contract = await getTronWebsiteRentContract(NetworkChain);
   console.log("contract is ", contract);
   let _currentDeployment = null;
   console.log("checking Deployment of _" + websiteURL + "_");
-  if (Blockchain == "tron") {
-    _currentDeployment = await contract.websiteToDeployment(websiteURL).call();
-  } else if (Blockchain == "ethereum") {
-    _currentDeployment = await contract.websiteToDeployment(websiteURL);
-  }
-  //   console.log("curremt deployment", _currentDeployment);
+  _currentDeployment = await contract.websiteToDeployment(websiteURL).call();
+  
+   //   console.log("curremt deployment", _currentDeployment);
   if (noDeployment(_currentDeployment)) {
     console.log("No deployment");
     return null;
   }
 
-  let rentTime =
-    Blockchain == "tron"
-      ? await contract.rentTime(websiteURL).call()
-      : await contract.rentTime(websiteURL);
+  let rentTime = await contract.rentTime(websiteURL).call()
+      
 
   let jsEpochRentTime = parseInt(rentTime * 1000);
 

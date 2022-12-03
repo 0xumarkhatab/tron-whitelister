@@ -21,7 +21,7 @@ let websiteType = "whitelist";
 // let Blockchain = "ethereum";
 // let NetworkChain = "goerli";
 let Blockchain = "tron";
-let NetworkChain = "nile";
+let NetworkChain = "shasta";
 
 export default function Home() {
   const [currentpage, setCurrentPage] = useState("home");
@@ -83,18 +83,11 @@ export default function Home() {
     setLoading(false);
   }
   async function fetchDeployment() {
-    if (web3ModalRef.current === undefined) {
-      web3ModalRef.current = new Web3Modal({
-        network: NetworkChain,
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
 
     let _currentDeployment = await getCurrentDeployment(
       Blockchain,
       NetworkChain,
-      web3ModalRef,
+      null,
       myUrlAddress
     );
     if (!_currentDeployment) return null;
@@ -108,6 +101,7 @@ export default function Home() {
     }
 
     let deploymentAddress = await fetchDeployment();
+    deploymentAddress="TQCYoTGXxf6AzTuEepnRtLBaniRueDMF9K"
     console.log("inside index", deploymentAddress);
     console.log("deployment", deploymentAddress);
     if (deploymentAddress != null) {
@@ -127,8 +121,7 @@ export default function Home() {
   async function connect() {
     let user = await getCurrentConnectedOwner(
       Blockchain,
-      NetworkChain,
-      web3ModalRef
+      NetworkChain,      
     );
     setConnectedWallet(user);
   }
