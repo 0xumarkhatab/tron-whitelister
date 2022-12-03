@@ -12,7 +12,7 @@ import { getBlockchainSpecificWhitelistContract } from "../SmartContractsStuff/c
 // let Blockchain = "ethereum";
 // let NetworkChain = "goerli";
 let Blockchain = "tron";
-let NetworkChain = "nile";
+let NetworkChain = "shasta";
 
 function NFTInformation(props) {
   const { isConnected, isDisconnected, address } = useAccount();
